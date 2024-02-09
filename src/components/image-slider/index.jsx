@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
+import "./styles.css";
 
 
 export default function ImageSlider ({ url, limit = 5, page = 1 }) {
@@ -25,11 +26,17 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
         }
     }
 
+    const handlePrevious = () => {
+        setCurrentSlide(currentSlide === 0 ? images.length - 1 : currentSlide - 1);
+    }
+
+    const handleNext = () => {
+        setCurrentSlide(currentSlide === images.length - 1 ? 0 : currentSlide + 1);
+    }
+
     useEffect(() => {
         if (url !== "") fetchImages(url)
     }, []);
-
-    console.log(images);
 
     if (loading) return <p>Loading...</p>
 
@@ -37,8 +44,7 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
 
     return (
         <div className="container">
-            <h1>ImageSlider</h1>
-            <BsArrowLeftCircleFill className={"arrow arrow-left"} />
+            <BsArrowLeftCircleFill onClick={handlePrevious} className={"arrow arrow-left"} />
             {
                images && images.length
                    ? images.map((imageItem, index) =>
@@ -46,12 +52,16 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
                             key={imageItem.id}
                             alt={imageItem.download_url}
                             src={imageItem.download_url}
-                            className="current-image"
+                            className={
+                                currentSlide === index
+                                    ? "current-image"
+                                    : "current-image hide-current-image"
+                            }
                         />
                    )
                    : null
             }
-            <BsArrowRightCircleFill className={"arrow arrow-right"} />
+            <BsArrowRightCircleFill onClick={handleNext} className={"arrow arrow-right"} />
             <span className="circle-indicators">
                 {
                     images && images.length
@@ -60,7 +70,6 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
                                 key={index}
                                 className="current-indicator"
                             >
-
                             </button>
                         )
                         : null

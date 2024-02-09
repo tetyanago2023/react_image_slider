@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 
 export default function ImageSlider ({ url, limit = 5, page = 1 }) {
@@ -9,6 +10,7 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
     const [loading, setLoading] = useState(false);
 
     async function fetchImages(getUrl) {
+        setLoading(true);
         try {
             setLoading(true);
             const response = await fetch(`${getUrl}?page=${page}&limit=${limit}`);
@@ -27,13 +29,43 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
         if (url !== "") fetchImages(url)
     }, []);
 
+    console.log(images);
+
     if (loading) return <p>Loading...</p>
 
     if (errorMsg) return <p>Error occurred: {errorMsg}</p>
 
     return (
         <div className="container">
-        <h1>ImageSlider</h1>
+            <h1>ImageSlider</h1>
+            <BsArrowLeftCircleFill className={"arrow arrow-left"} />
+            {
+               images && images.length
+                   ? images.map((imageItem, index) =>
+                        <img
+                            key={imageItem.id}
+                            alt={imageItem.download_url}
+                            src={imageItem.download_url}
+                            className="current-image"
+                        />
+                   )
+                   : null
+            }
+            <BsArrowRightCircleFill className={"arrow arrow-right"} />
+            <span className="circle-indicators">
+                {
+                    images && images.length
+                        ? images.map((_, index) =>
+                            <button
+                                key={index}
+                                className="current-indicator"
+                            >
+
+                            </button>
+                        )
+                        : null
+                }
+            </span>
         </div>
     )
 }

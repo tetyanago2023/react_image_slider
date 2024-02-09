@@ -44,10 +44,10 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
 
     return (
         <div className="container">
-            <BsArrowLeftCircleFill onClick={handlePrevious} className={"arrow arrow-left"} />
+            <BsArrowLeftCircleFill onClick={handlePrevious} className={"arrow arrow-left"}/>
             {
-               images && images.length
-                   ? images.map((imageItem, index) =>
+                images && images.length
+                    ? images.map((imageItem, index) =>
                         <img
                             key={imageItem.id}
                             alt={imageItem.download_url}
@@ -58,22 +58,24 @@ export default function ImageSlider ({ url, limit = 5, page = 1 }) {
                                     : "current-image hide-current-image"
                             }
                         />
-                   )
-                   : null
+                    )
+                    : null
             }
-            <BsArrowRightCircleFill onClick={handleNext} className={"arrow arrow-right"} />
+            <BsArrowRightCircleFill onClick={handleNext} className={"arrow arrow-right"}/>
             <span className="circle-indicators">
-                {
-                    images && images.length
-                        ? images.map((_, index) =>
-                            <button
-                                key={index}
-                                className="current-indicator"
-                            >
-                            </button>
-                        )
-                        : null
-                }
+                {images && images.length
+                    ? images.map((_, index) => (
+                        <button
+                            key={index}
+                            className={
+                                currentSlide === index
+                                    ? "current-indicator"
+                                    : "current-indicator inactive-indicator"
+                            }
+                            onClick={() => setCurrentSlide(index)}
+                        ></button>
+                    ))
+                    : null}
             </span>
         </div>
     )
